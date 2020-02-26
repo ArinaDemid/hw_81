@@ -35,24 +35,24 @@ router.post("/links", async (req, res) => {
       .send({ error: "URL must be present in the request" });
   }
 
-  const nanoidShortUrl = nanoid(7);
+  let nanoidShortUrl = null;
+  let findUrlInDB = null;
 
-  const findUrlInDB = await LinkUrl.find({ shortUrl: nanoidShortUrl });
+  do {
+    nanoidShortUrl = nanoid(7);
+    findUrlInDB = await LinkUrl.find({ shortUrl: nanoidShortUrl });
+  } while (findUrlInDB.length !== 0);
 
-  if (findUrlInDB.length === 0) {
+  try {
     const linkForSave = new LinkUrl({
       shortUrl: nanoidShortUrl,
       originalUrl: linkData.originalUrl
     });
 
-    try {
-      const result = await linkForSave.save();
-      res.send(result);
-    } catch (error) {
-      return res.status(400).send(error);
-    }
-  } else {
-    return res.status(400).send({message: "ShortUrl with the same name already exists"});
+    const result = await linkForSave.save();
+    res.send(result);
+  } catch (error) {
+    return res.status(400).send(error);
   }
 });
 

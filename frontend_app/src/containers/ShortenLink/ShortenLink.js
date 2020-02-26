@@ -41,7 +41,9 @@ class ShortenLink extends Component {
         >
           <h5>Your link now looks like this:</h5>
           <p>
-            <a href="#">{linkShort}</a>
+            <a href={linkShort} target="_blank" rel="noopener noreferrer">
+              {linkShort}
+            </a>
           </p>
         </Alert>
       </Fragment>
