@@ -29,7 +29,7 @@ router.get("/:shortUrl", async (req, res) => {
 router.post("/links", async (req, res) => {
   const linkData = req.body;
 
-  if (!linkData.url) {
+  if (!linkData.originalUrl) {
     return res
       .status(400)
       .send({ error: "URL must be present in the request" });
@@ -42,7 +42,7 @@ router.post("/links", async (req, res) => {
   if (findUrlInDB.length === 0) {
     const linkForSave = new LinkUrl({
       shortUrl: nanoidShortUrl,
-      originalUrl: linkData.url
+      originalUrl: linkData.originalUrl
     });
 
     try {
